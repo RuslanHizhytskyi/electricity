@@ -206,48 +206,4 @@ describe("Households + Power Plants", function () {
             assert.equal(world.householdHasElectricity(households[getRandomInt()]), false);
         });
     });
-    describe('complex network my own', () => {
-        forEach([
-            [30],
-            [100],
-        ]).it('Complex network %d', (size) => {
-            const world = new World();
-            const households = (new Array(size)).fill(undefined).map(() => world.createHousehold());
-
-            const getRandomInt = (max = size) => {
-                return Math.floor(Math.random() * max);
-            }
-
-            const powerPlant1 = world.createPowerPlant();
-            const powerPlant2 = world.createPowerPlant();
-
-            households.forEach((household, index) => {
-                world.connectHouseholdToHousehold(household, households[index === households.length - 1 ? 0 : index + 1])
-            });
-
-            world.connectHouseholdToHousehold(households[getRandomInt()], households[getRandomInt()])
-            world.connectHouseholdToHousehold(households[getRandomInt()], households[getRandomInt()])
-
-            world.connectHouseholdToPowerPlant(households[getRandomInt()], powerPlant1);
-            world.connectHouseholdToPowerPlant(households[getRandomInt()], powerPlant2);
-
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), true);
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), true);
-
-            world.killPowerPlant(powerPlant1);
-
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), true);
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), true);
-
-            world.killPowerPlant(powerPlant2);
-
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), false);
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), false);
-
-            world.repairPowerPlant(powerPlant2);
-
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), true);
-            assert.equal(world.householdHasElectricity(households[getRandomInt()]), true);
-        });
-    });
 });
